@@ -14,5 +14,11 @@ globals:
   noUiSlider: readonly
   Pristine: readonly
 
+rules:
+  quotes: [1, "single"]
+  no-unused-vars: warn
+  no-console: warn
+
+
 extends:
   "htmlacademy/vanilla"
