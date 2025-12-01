@@ -1,5 +1,14 @@
 import {getRandomElementsFromArray, generateRandomNumber} from './utils.js';
-import {MAX_COMMENTS, MAX_LIKES, MESSAGES, DESCRIPTIONS, MIN_LIKES, NAMES} from './constants.js';
+import {
+  MAX_COMMENTS,
+  MAX_LIKES,
+  MESSAGES,
+  DESCRIPTIONS,
+  MIN_LIKES,
+  NAMES,
+  MIN_AVATAR_ID,
+  MAX_AVATAR_ID, MIN_MESSAGES_COUNT, MAX_MESSAGES_COUNT
+} from './constants.js';
 
 
 function createPost(id, commentGenerator) {
@@ -25,13 +34,13 @@ function createPostGenerator(commentGenerator) {
 }
 
 function createComment(id) {
-  const avatarId = generateRandomNumber(1, 6);
-  const messageCount = generateRandomNumber(1, 2);
+  const avatarId = generateRandomNumber(MIN_AVATAR_ID, MAX_AVATAR_ID);
+  const messagesCount = generateRandomNumber(MIN_MESSAGES_COUNT, MAX_MESSAGES_COUNT);
   return {
     id,
     avatar: `img/avatar-${avatarId}.svg`,
     name: getRandomElementsFromArray(NAMES)[0],
-    message: getRandomElementsFromArray(MESSAGES, messageCount).join(' ')
+    message: getRandomElementsFromArray(MESSAGES, messagesCount).join(' ')
   };
 }
 
