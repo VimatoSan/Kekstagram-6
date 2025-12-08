@@ -4,6 +4,7 @@ function createPicture(data, template) {
   const likes = newPicture.querySelector('.picture__likes');
   const comments = newPicture.querySelector('.picture__comments');
 
+  newPicture.dataset.id = data.id;
   img.src = data.url;
   img.alt = data.description;
   likes.textContent = data.likes;
@@ -13,10 +14,11 @@ function createPicture(data, template) {
 
 function renderPictures(pictures) {
   const templateContent = document.querySelector('#picture').content;
+  const templatePicture = templateContent.querySelector('.picture');
   const picturesContainer = document.querySelector('.pictures');
   const pictureListFragment = document.createDocumentFragment();
 
-  pictures.forEach((picture) => {pictureListFragment.appendChild(createPicture(picture, templateContent));});
+  pictures.forEach((picture) => {pictureListFragment.append(createPicture(picture, templatePicture));});
   picturesContainer.append(pictureListFragment);
 }
 
