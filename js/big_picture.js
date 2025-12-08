@@ -41,26 +41,36 @@ function renderBigPicture(bigPicture, postData) {
 }
 
 function createPictureCloseHandlers(bigPicture) {
-  const body = document.querySelector('body');
+  const body = document.body;
   const closeButton = bigPicture.querySelector('.big-picture__cancel');
+
+  function onKeyDown(evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      close();
+    }
+  }
+
+  function onClick(evt) {
+    evt.preventDefault();
+    close();
+  }
 
   function close() {
     bigPicture.classList.add('hidden');
     body.classList.remove('modal-open');
+    closeButton.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onKeyDown);
   }
 
-  closeButton.addEventListener('click', close, { once: true });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      close();
-    }
-  },{ once: true });
+  closeButton.addEventListener('click', onClick);
+  document.addEventListener('keydown', onKeyDown);
 }
 
 function createPictureClickHandler(postDataList) {
   const picturesContainer = document.querySelector('.pictures');
   const bigPicture = document.querySelector('.big-picture');
-  const body = document.querySelector('body');
+  const body = document.body;
 
   picturesContainer.addEventListener('click', (evt) => {
     const picture = evt.target.closest('.picture');
