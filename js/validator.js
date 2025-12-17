@@ -50,7 +50,7 @@ function initValidator() {
   const descriptionElement = document.querySelector('.text__description');
 
   const descriptionError = `Длина комментария не должна превышать ${MAX_DESCRIPTION_LENGTH} символов`;
-  pristine.addValidator(hashtagElement, validateHashtag, () => pristine.errorText);
+  pristine.addValidator(hashtagElement, validateHashtag, pristine.errorText);
   pristine.addValidator(descriptionElement, validateDescription, descriptionError);
   return pristine;
 }
