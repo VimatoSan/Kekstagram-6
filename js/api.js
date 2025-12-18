@@ -27,5 +27,4 @@ function send(route, method, body = null) {
 }
 
 
-
 export {loadPosts, sendForm};
