@@ -8,16 +8,16 @@ function showFilters(pictures) {
   const filtersContainer = document.querySelector('.img-filters');
   filtersContainer.classList.remove('img-filters--inactive');
 
-  filterForm.addEventListener('click', (evt) => {
+  const foo = (evt) => {
     const filterButton = evt.target.closest('.img-filters__button');
     if (filterButton) {
       const curFilter = document.querySelector('.img-filters__button--active');
       curFilter.classList.remove('img-filters__button--active');
       filterButton.classList.add('img-filters__button--active');
-      const debouncedFilters = debounce(() =>  useFilters(filterButton, pictures));
-      debouncedFilters();
+      useFilters(filterButton, pictures);
     }
-  });
+  };
+  filterForm.addEventListener('click', debounce((evt) => foo(evt)));
 }
 
 function sortComments(pictureA, pictureB) {
