@@ -1,8 +1,10 @@
 import {initValidator} from './validator.js';
-import {renderErrorMessage, renderSuccessMessage} from './alerts.js';
+import {renderErrorMessage, renderSuccessMessage, isModalShown} from './alerts.js';
 import {sendForm} from './api.js';
 
 const pristine = initValidator();
+
+let closeForm;
 
 function createCloseFormHandler() {
   const imgUpload = document.querySelector('.img-upload__input');
@@ -17,20 +19,18 @@ function createCloseFormHandler() {
   }
 
   function onKeyDown(evt) {
-    if (evt.key === 'Escape') {
+    if (evt.key === 'Escape' && !isModalShown) {
       evt.preventDefault();
       close();
     }
   }
 
-  function close(isNeedSave = false) {
+  function close() {
     overlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
     imgUpload.value = '';
-    if (!isNeedSave) {
-      hashtagElement.value = '';
-      descriptionElements.value = '';
-    }
+    hashtagElement.value = '';
+    descriptionElements.value = '';
     hashtagElement.removeEventListener('keydown', onEsc);
     descriptionElements.removeEventListener('keydown', onEsc);
     form.removeEventListener('submit', onSubmit);
@@ -40,22 +40,22 @@ function createCloseFormHandler() {
 
   closeButton.addEventListener('click', onClick);
   document.addEventListener('keydown', onKeyDown);
-
-  return close;
+  return {closeForm: close, formEscHandler: onKeyDown};
 }
 
 function onSubmit(evt) {
   evt.preventDefault();
-
   if (pristine.validate()) {
     const formData = new FormData(evt.target);
     sendForm(formData)
       .then(() => {
-        createCloseFormHandler()();
+        if (!closeForm) {
+          closeForm = createCloseFormHandler();
+        }
+        closeForm();
         renderSuccessMessage();
       })
       .catch(() => {
-        createCloseFormHandler()(true);
         renderErrorMessage();
       });
   }
@@ -78,7 +78,7 @@ function openUploader() {
   hashtagElement.addEventListener('keydown', onEsc);
   descriptionElements.addEventListener('keydown', onEsc);
   form.addEventListener('submit', onSubmit);
-  createCloseFormHandler();
+  closeForm = createCloseFormHandler();
 }
 
 

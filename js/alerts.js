@@ -1,3 +1,5 @@
+let isModalShown = false;
+
 function createUploadErrorElement(errorText) {
   const errorMessageElement = document.createElement('section');
   errorMessageElement.classList.add('overlay');
@@ -24,18 +26,24 @@ function renderUploadError(errorText) {
   document.body.appendChild(errorMessageElement);
 }
 
-function createResponseMessage(button, template) {
-  const overlay = template.cloneNode(true);
+function createResponseMessage(button, modalOverlay) {
+  isModalShown = true;
+
   function close() {
+    isModalShown = false;
     button.removeEventListener('click', onCLick);
-    overlay.removeEventListener('click', onCLick);
+    modalOverlay.removeEventListener('click', onCLick);
     document.removeEventListener('keydown', onKeydown);
-    overlay.remove();
+    if (modalOverlay.classList.contains('error')) {
+      const overlay = document.querySelector('.img-upload__overlay');
+      overlay.classList.remove('hidden');
+    }
+    modalOverlay.remove();
   }
 
   function onKeydown(evt) {
-    evt.preventDefault();
     if (evt.key === 'Escape') {
+      evt.preventDefault();
       close();
     }
   }
@@ -44,23 +52,25 @@ function createResponseMessage(button, template) {
   }
 
   button.addEventListener('click', onCLick);
-  overlay.addEventListener('click', onCLick);
+  modalOverlay.addEventListener('click', onCLick);
   document.addEventListener('keydown', onKeydown);
-  document.body.appendChild(overlay);
+  document.body.appendChild(modalOverlay);
 }
 
 function renderSuccessMessage() {
   const templateContent = document.querySelector('#success').content;
   const btn = templateContent.querySelector('.success__button');
   const template = templateContent.querySelector('.success');
-  createResponseMessage(btn, template);
+  createResponseMessage(btn, template.cloneNode(true));
 }
 
 function renderErrorMessage() {
+  const overlay = document.querySelector('.img-upload__overlay');
+  overlay.classList.add('hidden');
   const templateContent = document.querySelector('#error').content;
-  const btn = templateContent.querySelector('.error__button');
-  const template = templateContent.querySelector('.error');
+  const template = templateContent.querySelector('.error').cloneNode(true);
+  const btn = template.querySelector('.error__button');
   createResponseMessage(btn, template);
 }
 
-export {renderUploadError, renderSuccessMessage, renderErrorMessage};
+export {renderUploadError, renderSuccessMessage, renderErrorMessage, isModalShown};

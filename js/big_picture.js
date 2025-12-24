@@ -20,7 +20,7 @@ function renderCommentCounter(visibleCount) {
 
 function getPostData(picture, postDataList) {
   const id = Number(picture.dataset.id);
-  return postDataList[id - 1];
+  return postDataList[id];
 }
 
 function appendComments(comments, commentsContainer) {
@@ -104,7 +104,6 @@ function createPictureClickHandler(postDataList) {
   const picturesContainer = document.querySelector('.pictures');
   const bigPicture = document.querySelector('.big-picture');
   const body = document.body;
-
   picturesContainer.addEventListener('click', (evt) => {
     const picture = evt.target.closest('.picture');
     if (picture) {
