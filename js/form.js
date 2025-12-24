@@ -40,7 +40,7 @@ function createCloseFormHandler() {
 
   closeButton.addEventListener('click', onClick);
   document.addEventListener('keydown', onKeyDown);
-  return {closeForm: close, formEscHandler: onKeyDown};
+  return close;
 }
 
 function onSubmit(evt) {
