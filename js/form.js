@@ -13,7 +13,8 @@ function createCloseFormHandler() {
   const closeButton = document.querySelector('.img-upload__cancel');
   const hashtagElement = document.querySelector('.text__hashtags');
   const descriptionElements = document.querySelector('.text__description');
-
+  const preview = form.querySelector('.img-upload__preview img');
+  const previewEffects = form.querySelectorAll('.effects__preview');
   function onClick() {
     close();
   }
@@ -31,6 +32,11 @@ function createCloseFormHandler() {
     imgUpload.value = '';
     hashtagElement.value = '';
     descriptionElements.value = '';
+    preview.src='../img/upload-default-image.jpg';
+    previewEffects.forEach((effect) => {
+      effect.style.backgroundImage = 'url(../img/upload-default-image.jpg)';
+    });
+
     hashtagElement.removeEventListener('keydown', onEsc);
     descriptionElements.removeEventListener('keydown', onEsc);
     form.removeEventListener('submit', onSubmit);
@@ -79,8 +85,13 @@ function openUploader() {
   const descriptionElements = document.querySelector('.text__description');
   const preview = form.querySelector('.img-upload__preview img');
   const file = fileChooser.files[0];
+  const previewEffects = form.querySelectorAll('.effects__preview');
   if (isImageFile(file.type)) {
+    const imageUrl = URL.createObjectURL(file);
     preview.src = URL.createObjectURL(file);
+    previewEffects.forEach((effect) => {
+      effect.style.backgroundImage = `url(${imageUrl})`;
+    });
   }
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
