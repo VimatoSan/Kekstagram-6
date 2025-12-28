@@ -67,12 +67,21 @@ function onEsc(evt) {
   }
 }
 
+function isImageFile(fileType) {
+  return fileType === 'image/jpeg' || fileType === 'image/png';
+}
+
 function openUploader() {
   const form = document.querySelector('.img-upload__form');
+  const fileChooser = form.querySelector('.img-upload__input');
   const overlay = document.querySelector('.img-upload__overlay');
   const hashtagElement = document.querySelector('.text__hashtags');
   const descriptionElements = document.querySelector('.text__description');
-
+  const preview = form.querySelector('.img-upload__preview img');
+  const file = fileChooser.files[0];
+  if (isImageFile(file.type)) {
+    preview.src = URL.createObjectURL(file);
+  }
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   hashtagElement.addEventListener('keydown', onEsc);
