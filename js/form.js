@@ -1,5 +1,5 @@
 import {initValidator} from './validator.js';
-import {renderErrorMessage, renderSuccessMessage, isModalShown} from './alerts.js';
+import {renderErrorMessage, renderSuccessMessage, isModalShown, renderUploadError} from './alerts.js';
 import {sendForm} from './api.js';
 
 const pristine = initValidator();
@@ -87,13 +87,15 @@ function openUploader() {
   const preview = form.querySelector('.img-upload__preview img');
   const file = fileChooser.files[0];
   const previewEffects = form.querySelectorAll('.effects__preview');
-  if (isImageFile(file.type)) {
-    const imageUrl = URL.createObjectURL(file);
-    preview.src = URL.createObjectURL(file);
-    previewEffects.forEach((effect) => {
-      effect.style.backgroundImage = `url(${imageUrl})`;
-    });
+  if (!isImageFile(file.type)) {
+    renderUploadError('Не подходящий тип файла');
+    return;
   }
+  const imageUrl = URL.createObjectURL(file);
+  preview.src = URL.createObjectURL(file);
+  previewEffects.forEach((effect) => {
+    effect.style.backgroundImage = `url(${imageUrl})`;
+  });
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   hashtagElement.addEventListener('keydown', onEsc);
